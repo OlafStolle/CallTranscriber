@@ -1,7 +1,10 @@
 import logging
+import re
+from typing import Literal
 from fastapi import APIRouter, Depends, File, Form, UploadFile, HTTPException, BackgroundTasks
 from datetime import datetime
 from app.auth import get_current_user
+from app.config import settings
 from app.models.schemas import UploadResponse
 from app.services import storage, transcription, db
 
@@ -28,7 +31,7 @@ async def upload_audio(
     background_tasks: BackgroundTasks,
     audio: UploadFile = File(...),
     remote_number: str = Form(...),
-    direction: str = Form(...),
+    direction: Literal["inbound", "outbound"] = Form(...),
     started_at: datetime = Form(...),
     ended_at: datetime = Form(...),
     duration_seconds: int = Form(...),
@@ -36,9 +39,16 @@ async def upload_audio(
 ):
     if not audio.content_type or not audio.content_type.startswith("audio/"):
         raise HTTPException(status_code=400, detail="File must be audio")
-    audio_data = await audio.read()
-    if len(audio_data) > 100 * 1024 * 1024:
-        raise HTTPException(status_code=413, detail="File too large (max 100MB)")
+
+    if not re.match(r"^\+?[\d\s\-()]{3,30}$", remote_number):
+        raise HTTPException(status_code=400, detail="Invalid phone number format")
+
+    # Read with size limit check
+    max_size = settings.upload_max_size_mb * 1024 * 1024
+    audio_data = await audio.read(max_size + 1)
+    if len(audio_data) > max_size:
+        raise HTTPException(status_code=413, detail=f"File too large (max {settings.upload_max_size_mb}MB)")
+
     call = await db.create_call(user["user_id"], {
         "remote_number": remote_number,
         "direction": direction,

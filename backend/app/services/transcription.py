@@ -4,7 +4,7 @@ import os
 from app.config import settings
 from app.models.schemas import TranscriptionResult, TranscriptSegment
 
-client = openai.OpenAI(api_key=settings.openai_api_key)
+client = openai.AsyncOpenAI(api_key=settings.openai_api_key)
 
 
 async def transcribe_audio(audio_data: bytes, filename: str = "audio.wav") -> TranscriptionResult:
@@ -13,7 +13,7 @@ async def transcribe_audio(audio_data: bytes, filename: str = "audio.wav") -> Tr
         tmp_path = tmp.name
     try:
         with open(tmp_path, "rb") as audio_file:
-            response = client.audio.transcriptions.create(
+            response = await client.audio.transcriptions.create(
                 model="whisper-1",
                 file=audio_file,
                 language="de",
@@ -23,7 +23,11 @@ async def transcribe_audio(audio_data: bytes, filename: str = "audio.wav") -> Tr
         segments = []
         if hasattr(response, "segments") and response.segments:
             segments = [
-                TranscriptSegment(start=s["start"], end=s["end"], text=s["text"])
+                TranscriptSegment(
+                    start=s.start if hasattr(s, "start") else s["start"],
+                    end=s.end if hasattr(s, "end") else s["end"],
+                    text=s.text if hasattr(s, "text") else s["text"],
+                )
                 for s in response.segments
             ]
         return TranscriptionResult(

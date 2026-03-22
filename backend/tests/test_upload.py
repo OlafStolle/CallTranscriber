@@ -11,7 +11,8 @@ def test_upload_requires_auth(client):
 
 
 @patch("app.routers.upload.process_upload", new_callable=AsyncMock)
-def test_upload_accepts_audio(mock_process, client):
+@patch("app.services.db.create_call", new_callable=AsyncMock, return_value={"id": "call-123"})
+def test_upload_accepts_audio(mock_create_call, mock_process, client):
     mock_process.return_value = None
 
     async def override_get_current_user():
@@ -20,18 +21,17 @@ def test_upload_accepts_audio(mock_process, client):
     app.dependency_overrides[get_current_user] = override_get_current_user
     try:
         audio_data = io.BytesIO(b"\x00" * 1024)
-        with patch("app.services.db.create_call", new_callable=AsyncMock, return_value={"id": "call-123"}):
-            response = client.post(
-                "/upload",
-                files={"audio": ("test.wav", audio_data, "audio/wav")},
-                data={
-                    "remote_number": "+491234567890",
-                    "direction": "outbound",
-                    "started_at": "2026-03-22T10:00:00Z",
-                    "ended_at": "2026-03-22T10:05:00Z",
-                    "duration_seconds": "300",
-                },
-            )
+        response = client.post(
+            "/upload",
+            files={"audio": ("test.wav", audio_data, "audio/wav")},
+            data={
+                "remote_number": "+491234567890",
+                "direction": "outbound",
+                "started_at": "2026-03-22T10:00:00Z",
+                "ended_at": "2026-03-22T10:05:00Z",
+                "duration_seconds": "300",
+            },
+        )
     finally:
         app.dependency_overrides.clear()
 

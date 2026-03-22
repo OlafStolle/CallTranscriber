@@ -1,5 +1,6 @@
 package com.calltranscriber.data.remote
 
+import com.calltranscriber.BuildConfig
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
@@ -8,7 +9,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import java.io.File
 
-class ApiClient(private val baseUrl: String = "https://transcriber-api.yourdomain.com") {
+class ApiClient(private val baseUrl: String = BuildConfig.API_BASE_URL) {
     private val client = HttpClient(Android)
 
     suspend fun uploadAudio(token: String, callId: String, audioFile: File, remoteNumber: String, direction: String, startedAt: String, endedAt: String, durationSeconds: Int): HttpResponse {

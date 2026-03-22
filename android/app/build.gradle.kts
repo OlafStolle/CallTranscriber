@@ -16,8 +16,18 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
+
+        buildConfigField("String", "SUPABASE_URL", "\"${project.findProperty("SUPABASE_URL") ?: "https://your-project.supabase.co"}\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${project.findProperty("SUPABASE_ANON_KEY") ?: "your-anon-key"}\"")
+        buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL") ?: "https://transcriber-api.yourdomain.com"}\"")
+        buildConfigField("String", "SIP_USERNAME", "\"${project.findProperty("SIP_USERNAME") ?: ""}\"")
+        buildConfigField("String", "SIP_PASSWORD", "\"${project.findProperty("SIP_PASSWORD") ?: ""}\"")
+        buildConfigField("String", "SIP_DOMAIN", "\"${project.findProperty("SIP_DOMAIN") ?: "sip.zadarma.com"}\"")
     }
-    buildFeatures { compose = true }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

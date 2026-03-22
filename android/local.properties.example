@@ -1,0 +1,7 @@
+sdk.dir=/path/to/android/sdk
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=eyJ...your-anon-key
+API_BASE_URL=https://transcriber-api.yourdomain.com
+SIP_USERNAME=100001
+SIP_PASSWORD=your-sip-password
+SIP_DOMAIN=sip.zadarma.com

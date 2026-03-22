@@ -10,3 +10,16 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.call-transcriber.rule=Host(`transcriber-api.yourdomain.com`)"
       - "traefik.http.routers.call-transcriber.tls.certresolver=letsencrypt"
+
+  web:
+    build: ./web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.call-transcriber-web.rule=Host(`transcriber.yourdomain.com`)"
+      - "traefik.http.routers.call-transcriber-web.tls.certresolver=letsencrypt"

@@ -1,0 +1,3 @@
+-- supabase/seed.sql
+-- Seed data is inserted via Supabase Auth + API, not direct SQL
+-- This file documents the expected test data structure

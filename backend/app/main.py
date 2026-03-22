@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routers import health
+from app.routers import health, upload, calls
 
 
 @asynccontextmanager
@@ -19,3 +19,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(health.router, tags=["health"])
+app.include_router(upload.router, tags=["upload"])
+app.include_router(calls.router, tags=["calls"])

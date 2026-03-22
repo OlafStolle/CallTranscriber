@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Call Transcriber</string>
+    <string name="recording_notice">Dieses Gespraech wird aufgezeichnet</string>
+    <string name="recording_active">Aufnahme laeuft</string>
+    <string name="no_calls">Noch keine Gespraeche</string>
+    <string name="search_hint">Transkripte durchsuchen…</string>
+    <string name="login_title">Call Transcriber</string>
+    <string name="register_title">Konto erstellen</string>
+    <string name="btn_login">Anmelden</string>
+    <string name="btn_register">Registrieren</string>
+    <string name="btn_call">Anrufen</string>
+    <string name="btn_hangup">Auflegen</string>
+    <string name="call_connected">Gespraech laeuft — wird aufgezeichnet</string>
+    <string name="call_connecting">Verbindung wird aufgebaut…</string>
+    <string name="permission_mic_needed">Mikrofon-Berechtigung noetig</string>
+</resources>

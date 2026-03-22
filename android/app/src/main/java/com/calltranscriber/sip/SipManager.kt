@@ -33,14 +33,17 @@ class SipManager @Inject constructor(@dagger.hilt.android.qualifiers.Application
         val account = core.createAccount(accountParams); core.addAccount(account); core.defaultAccount = account
         core.addListener(object : CoreListenerStub() {
             override fun onAccountRegistrationStateChanged(core: Core, account: Account, state: RegistrationState, message: String) {
+                android.util.Log.i("SipManager", "SIP registration: $state - $message")
                 _registrationState.value = when (state) { RegistrationState.Progress -> SipRegistrationState.REGISTERING; RegistrationState.Ok -> SipRegistrationState.REGISTERED; RegistrationState.Failed -> SipRegistrationState.FAILED; else -> SipRegistrationState.NONE }
             }
             override fun onCallStateChanged(core: Core, call: Call, state: Call.State, message: String) {
                 currentCall = call
+                android.util.Log.i("SipManager", "Call state: $state - $message")
                 _callState.value = when (state) { Call.State.IncomingReceived, Call.State.OutgoingRinging -> CallState.RINGING; Call.State.StreamsRunning -> CallState.CONNECTED; Call.State.End, Call.State.Released, Call.State.Error -> { currentCall = null; CallState.ENDED }; else -> _callState.value }
             }
         })
         core.start()
+        android.util.Log.i("SipManager", "SIP core started, registering to ${config.domain}")
     }
 
     fun makeCall(number: String): Call? { val addr = core.interpretUrl("sip:$number@${core.defaultAccount?.params?.domain}") ?: return null; return core.inviteAddress(addr) }

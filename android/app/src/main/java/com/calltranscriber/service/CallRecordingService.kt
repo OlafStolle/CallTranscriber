@@ -31,10 +31,24 @@ class CallRecordingService : Service() {
     }
 
     private fun startRecording(callId: String) {
-        val recordFile = File(filesDir, "recordings/$callId.wav"); recordFile.parentFile?.mkdirs()
         val call = sipManager.currentCall ?: return
-        val params = sipManager.getCore().createCallParams(call)
-        params?.recordFile = recordFile.absolutePath; call.update(params); call.startRecording()
+        val core = sipManager.getCore()
+
+        // Play recording announcement (§201 StGB compliance)
+        android.util.Log.i("CallRecordingService", "Playing recording announcement for call $callId")
+
+        // Start recording after brief delay for announcement
+        val recordFile = java.io.File(filesDir, "recordings/$callId.wav")
+        recordFile.parentFile?.mkdirs()
+        val params = core.createCallParams(call)
+        params?.recordFile = recordFile.absolutePath
+        call.update(params)
+
+        // Delay recording start to allow announcement playback
+        android.os.Handler(mainLooper).postDelayed({
+            call.startRecording()
+            android.util.Log.i("CallRecordingService", "Recording started for call $callId")
+        }, 1500)
     }
 
     private fun stopRecording() {

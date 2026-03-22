@@ -3,3 +3,7 @@
 - [06:00] Kernfeature: Persoenliches Konto mit Login, Transkripte im Konto sichtbar am Handy und Desktop
 - [06:01] Freigabe fuer Ansatz A: Supabase Monolith-First
 - [06:01] Vollstaendigen Implementierungsplan schreiben mit 15 Tasks
+- [06:10] Subagent-Driven Execution gestartet: Backend-Track zuerst
+- [06:15] Task 1 (Scaffolding) + Task 2 (Supabase Schema) + Task 3 (FastAPI Auth) fertig
+- [06:20] Task 4 (Upload+Transcription) + Task 5 (Docker) + Task 14 (DSGVO) parallel gestartet
+- [06:25] Backend-Track komplett: 6 Commits, 6/6 Tests, 29 Dateien

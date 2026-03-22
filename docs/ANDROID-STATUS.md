@@ -165,3 +165,29 @@ android/
             Screen.kt                 # Route Definitionen
             NavGraph.kt               # Navigation Host
 ```
+
+---
+
+## Recovery
+
+Lies diese Datei + `docs/phase1-summary.md` + `CLAUDE.md` + letzte 3 Git-Commits.
+
+**Aktueller Stand:** Phase 1 komplett. 21 Commits auf main. Alle 3 Tracks implementiert (Backend, Web, Android). Backend-Tests 6/6 PASSED. Android braucht Android SDK fuer Build-Verifikation.
+
+**Letzter Commit:** `fab4535` — docs: Android app status
+
+**Branch:** `main` (+ `feature/phase1-complete` Tag)
+
+**Naechster Schritt:**
+1. Supabase-Projekt anlegen, Migrations 001-007 anwenden
+2. `.env` Dateien befuellen (Backend: SUPABASE_URL, SERVICE_KEY, JWT_SECRET, OPENAI_API_KEY)
+3. `docker compose up -d` auf VPS
+4. Android Studio: Projekt oeffnen, Gradle Sync, Credentials in SupabaseClient.kt + SipConfig.kt + ApiClient.kt eintragen
+5. `./gradlew assembleDebug` — erster Build
+6. End-to-End Test: Anruf → Aufnahme → Upload → Transkript im Web-Dashboard
+
+**Wichtige Dateien fuer Kontext:**
+- `docs/superpowers/plans/2026-03-22-phase1-implementation.md` — Gesamtplan (Backend + Web)
+- `docs/superpowers/plans/2026-03-22-android-track.md` — Android-Plan (7 Tasks)
+- `docs/superpowers/specs/2026-03-22-phase1-design.md` — Architektur-Spec
+- `docs/phase1-summary.md` — Zusammenfassung aller Tracks

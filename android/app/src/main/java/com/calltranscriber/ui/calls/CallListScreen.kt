@@ -21,11 +21,41 @@ import java.util.*
 fun CallListScreen(onCallClick: (String) -> Unit, onDialerClick: () -> Unit, viewModel: CallListViewModel = hiltViewModel()) {
     val calls by viewModel.calls.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
-    Scaffold(topBar = { TopAppBar(title = { Text("Gespraeche") }) }, floatingActionButton = { FloatingActionButton(onClick = onDialerClick) { Icon(Icons.Default.Phone, "Anrufen") } }) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
-            OutlinedTextField(value = searchQuery, onValueChange = viewModel::onSearchQueryChanged, label = { Text("Suchen...") }, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), singleLine = true)
-            if (calls.isEmpty()) { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Keine Gespraeche") } }
-            else { LazyColumn { items(calls, key = { it.id }) { call -> CallCard(call) { onCallClick(call.id) } } } }
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val pullRefreshState = rememberPullToRefreshState()
+
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Gespraeche") }) },
+        floatingActionButton = { FloatingActionButton(onClick = onDialerClick) { Icon(Icons.Default.Phone, "Anrufen") } },
+    ) { padding ->
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = { viewModel.refresh() },
+            state = pullRefreshState,
+            modifier = Modifier.padding(padding),
+        ) {
+            Column {
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = viewModel::onSearchQueryChanged,
+                    label = { Text("Suchen...") },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                    singleLine = true,
+                )
+                if (calls.isEmpty() && !isRefreshing) {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(Icons.Default.Phone, contentDescription = null, modifier = Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Spacer(Modifier.height(8.dp))
+                            Text("Noch keine Gespraeche", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                } else {
+                    LazyColumn {
+                        items(calls, key = { it.id }) { call -> CallCard(call) { onCallClick(call.id) } }
+                    }
+                }
+            }
         }
     }
 }
@@ -35,10 +65,16 @@ fun CallCard(call: CallEntity, onClick: () -> Unit) {
     val fmt = remember { SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY) }
     Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).clickable(onClick = onClick)) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(call.remoteNumber, style = MaterialTheme.typography.titleMedium); Text(if (call.direction == "inbound") "Eingehend" else "Ausgehend", style = MaterialTheme.typography.labelMedium) }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(call.remoteNumber, style = MaterialTheme.typography.titleMedium)
+                Text(if (call.direction == "inbound") "Eingehend" else "Ausgehend", style = MaterialTheme.typography.labelMedium)
+            }
             Text(fmt.format(Date(call.startedAt)), style = MaterialTheme.typography.bodySmall)
             call.durationSeconds?.let { Text("${it / 60}:${"%02d".format(it % 60)} Min", style = MaterialTheme.typography.bodySmall) }
-            call.transcriptText?.let { Text(it.take(120) + if (it.length > 120) "..." else "", style = MaterialTheme.typography.bodySmall, maxLines = 2) } ?: Text(call.status, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+            Spacer(Modifier.height(4.dp))
+            call.transcriptText?.let {
+                Text(it.take(120) + if (it.length > 120) "..." else "", style = MaterialTheme.typography.bodySmall, maxLines = 2)
+            } ?: Text(call.status, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         }
     }
 }

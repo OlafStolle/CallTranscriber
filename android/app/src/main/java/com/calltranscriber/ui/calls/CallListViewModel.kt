@@ -16,4 +16,15 @@ class CallListViewModel @Inject constructor(private val callRepository: CallRepo
     val calls: StateFlow<List<CallEntity>> = _searchQuery.debounce(300).flatMapLatest { q -> if (q.isBlank()) callRepository.getAllCalls() else callRepository.searchCalls(q) }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     init { viewModelScope.launch { try { callRepository.syncFromCloud() } catch (_: Exception) {} } }
     fun onSearchQueryChanged(query: String) { _searchQuery.value = query }
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            try { callRepository.syncFromCloud() } catch (_: Exception) {}
+            _isRefreshing.value = false
+        }
+    }
 }

@@ -20,9 +20,6 @@ android {
         buildConfigField("String", "SUPABASE_URL", "\"${project.findProperty("SUPABASE_URL") ?: "https://your-project.supabase.co"}\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"${project.findProperty("SUPABASE_ANON_KEY") ?: "your-anon-key"}\"")
         buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL") ?: "https://transcriber-api.yourdomain.com"}\"")
-        buildConfigField("String", "SIP_USERNAME", "\"${project.findProperty("SIP_USERNAME") ?: ""}\"")
-        buildConfigField("String", "SIP_PASSWORD", "\"${project.findProperty("SIP_PASSWORD") ?: ""}\"")
-        buildConfigField("String", "SIP_DOMAIN", "\"${project.findProperty("SIP_DOMAIN") ?: "sip.zadarma.com"}\"")
     }
     buildFeatures {
         compose = true
@@ -99,6 +96,5 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:3.0.2")
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.2")
 
-    // linphone SIP SDK
-    implementation("org.linphone:linphone-sdk-android:5.3.74")
+
 }

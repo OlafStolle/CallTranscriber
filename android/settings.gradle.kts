@@ -11,7 +11,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://linphone.org/maven_repository") }
+
     }
 }
 rootProject.name = "CallTranscriber"

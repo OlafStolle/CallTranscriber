@@ -28,6 +28,29 @@ android {
         compose = true
         buildConfig = true
     }
+
+    signingConfigs {
+        create("release") {
+            val props = rootProject.file("keystore.properties")
+            if (props.exists()) {
+                val ks = java.util.Properties().apply { load(props.inputStream()) }
+                storeFile = file(ks["storeFile"] as String)
+                storePassword = ks["storePassword"] as String
+                keyAlias = ks["keyAlias"] as String
+                keyPassword = ks["keyPassword"] as String
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

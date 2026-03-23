@@ -1,0 +1,11 @@
+## 2026-03-23 01:00 — Phase 1+2 Call Transcriber komplett
+- **Was:** Vollstaendige Implementierung Phase 1 (Backend + Web + Android) + Phase 2 Code-Tasks (BuildConfig, SIP, UI Polish, ProGuard)
+- **Wo:** /mnt/volume/Projects/call-transcriber — 28 Commits auf main
+- **Ergebnis:**
+  - Backend: 6/6 Tests PASSED, async OpenAI + Supabase, DSGVO Delete, Docker
+  - Web: Login/Register visuell getestet (Playwright Screenshots), Call-Liste, Transkript, Export
+  - Android: 34 Kotlin-Dateien, BuildConfig Credentials, SIP Logging, Theme, Permissions, ProGuard
+- **Details:**
+  - Code Review (opus) fand 7 Issues → alle gefixt (async clients, input validation, RLS)
+  - UploadWorker Bug gefixt: shared auth session statt neue Instanz
+  - Web UI visuell verifiziert mit Playwright Screenshots

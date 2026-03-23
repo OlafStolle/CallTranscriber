@@ -1,7 +1,3 @@
-# linphone-sdk
--keep class org.linphone.** { *; }
--dontwarn org.linphone.**
-
 # Supabase / Ktor
 -keep class io.github.jan.supabase.** { *; }
 -keep class io.ktor.** { *; }

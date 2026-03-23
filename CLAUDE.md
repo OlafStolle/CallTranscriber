@@ -1,34 +1,31 @@
-# Call Transcriber — Android VoIP + Cloud Transkription
+# Call Transcriber — Android Mikrofon-Recorder + Cloud Transkription
 
 ## Zweck
-Android-App die über eigene VoIP/SIP-Telefonie Gespräche aufnimmt, transkribiert und an CRM/Email sendet.
+Android-App die während normaler Telefonate das Gespräch per Mikrofon aufnimmt, transkribiert und im persönlichen Konto speichert.
 
 ## Entscheidung
-KEIN PSTN-Recording-Hack. Eigene VoIP-App mit Zadarma SIP.
-Grund: Android gibt Dritt-Apps keinen sauberen Zugang zum Carrier-Call-Audio.
+Mikrofon-Recorder (AudioRecord mit VOICE_COMMUNICATION). KEIN SIP/VoIP.
+Grund: Simpelster Ansatz — User telefoniert normal, unsere App nimmt per Mikrofon auf.
 
 ## Tech Stack
-- **Android:** Kotlin, Jetpack Compose, ConnectionService/Telecom API
-- **VoIP:** Zadarma SIP-Trunk, SRTP
+- **Android:** Kotlin, Jetpack Compose, AudioRecord API, PhoneStateListener
 - **Cloud:** FastAPI, OpenAI Whisper/GPT-4o-transcribe
-- **CRM:** Supabase DB, n8n Webhooks, Email-Versand
-- **Speicher:** App-specific Storage (verschlüsselt), WorkManager Upload
+- **DB:** Supabase (Auth + PostgreSQL + Storage)
+- **Speicher:** App-specific Storage (EncryptedFile), WorkManager Upload
 
 ## Architektur
 ```
 Android App (Kotlin)
-  ├── SIP-Client (Zadarma)
-  ├── Foreground Service (Recording)
-  ├── Lokaler Chunker + VAD
-  ├── EncryptedFile Storage
+  ├── PhoneStateListener (erkennt Anruf-Start/Ende)
+  ├── AudioRecord (VOICE_COMMUNICATION) im Foreground Service
+  ├── EncryptedFile Storage (AES-256-GCM)
   └── WorkManager Upload Queue
         ↓
 Cloud (FastAPI auf VPS)
-  ├── Upload Endpoint (Auth Token)
+  ├── Upload Endpoint (Supabase Auth Token)
   ├── OpenAI Transcription API
   ├── Zusammenfassung (GPT-4o)
   ├── CRM Integration (Supabase)
-  ├── Email mit Transkript
   └── DSGVO: Retention/Deletion
 ```
 
@@ -41,7 +38,7 @@ Cloud (FastAPI auf VPS)
 - Offline verfügbar auf dem Handy (lokaler Cache)
 
 ## Phasen
-- Phase 1: SIP-Client + Recording + Upload + Cloud-Transkript + Konto/Dashboard
+- Phase 1: Mikrofon-Recorder + Upload + Cloud-Transkript + Konto/Dashboard
 - Phase 2: Zusammenfassung, Action Items, Kundenzuordnung, Sucharchiv
 - Phase 3: Lokale Preview-ASR, Offline-Fallback
 

@@ -18,7 +18,7 @@
 | ProGuard Rules | ✅ Done | Supabase, Ktor, Room, Serialization |
 | Signing Config | ✅ Done | keystore.properties-basiert |
 | §201 StGB Notification | ✅ Done | Prominenter Hinweis in Foreground Notification |
-| Gradle Wrapper | ❌ Offen | Braucht `gradle wrapper --gradle-version 8.11` |
+| Gradle Wrapper | ❌ BLOCKER | `gradle` CLI nicht auf Server verfügbar — braucht lokale Dev-Maschine mit Android SDK/Gradle |
 | Erster Build | ❌ Offen | Braucht Android SDK (nicht auf diesem System) |
 | Recording Announcement | ❌ Offen | Audio-Datei "Gespräch wird aufgezeichnet" |
 | E2E Test auf Gerät | ❌ Offen | Braucht Android-Gerät/Emulator |
@@ -33,6 +33,9 @@ cd /mnt/volume/Projects/call-transcriber/android
 gradle wrapper --gradle-version 8.11
 ```
 Braucht `gradle` CLI oder Android Studio.
+
+**⚠ BLOCKER (2026-03-24):** `gradle` CLI ist auf dem VPS/Server nicht installiert.
+Lösung: Auf lokaler Entwicklungsmaschine mit Android SDK ausführen, dann `gradlew`, `gradle/wrapper/` committen.
 
 ### 2. Erster Build
 ```bash
@@ -63,6 +66,6 @@ Aktueller Plan: `docs/superpowers/plans/2026-03-24-android-remaining.md`
 
 Lies diese Datei + `CLAUDE.md` + `docs/ARCHITECTURE-DECISIONS.md`.
 
-**Aktueller Stand:** Alle Code-Änderungen erledigt. Blocker: Gradle Wrapper + Android SDK für Build.
+**Aktueller Stand:** Alle Code-Änderungen erledigt. Blocker: `gradle` CLI nicht auf Server verfügbar.
 
-**Nächster Schritt:** Gradle Wrapper anlegen, dann `./gradlew assembleDebug`.
+**Nächster Schritt:** Gradle Wrapper auf lokaler Dev-Maschine mit Android SDK generieren, committen, dann `./gradlew assembleDebug`.

@@ -7,13 +7,13 @@ services:
       - ./backend/.env
     restart: unless-stopped
     networks:
-      - traefik
+      - coolify
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.calltrans-api.rule=Host(`transcriber-api.aicraftors.com`)"
-      - "traefik.http.routers.calltrans-api.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.calltrans-api.rule=Host(`calltrans-api.72.60.181.127.sslip.io`)"
+      - "traefik.http.routers.calltrans-api.entrypoints=http"
       - "traefik.http.services.calltrans-api.loadbalancer.server.port=8000"
-      - "traefik.docker.network=traefik"
+      - "traefik.docker.network=coolify"
 
   web:
     build: ./web
@@ -23,14 +23,14 @@ services:
       - ./web/.env
     restart: unless-stopped
     networks:
-      - traefik
+      - coolify
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.calltrans-web.rule=Host(`transcriber.aicraftors.com`)"
-      - "traefik.http.routers.calltrans-web.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.calltrans-web.rule=Host(`calltrans-web.72.60.181.127.sslip.io`)"
+      - "traefik.http.routers.calltrans-web.entrypoints=http"
       - "traefik.http.services.calltrans-web.loadbalancer.server.port=3000"
-      - "traefik.docker.network=traefik"
+      - "traefik.docker.network=coolify"
 
 networks:
-  traefik:
+  coolify:
     external: true

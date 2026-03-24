@@ -17,9 +17,9 @@ android {
         versionCode = 1
         versionName = "1.0.0"
 
-        buildConfigField("String", "SUPABASE_URL", "\"${project.findProperty("SUPABASE_URL") ?: "https://placeholder.supabase.co"}\"")
-        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${project.findProperty("SUPABASE_ANON_KEY") ?: "placeholder"}\"")
-        buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL") ?: "https://transcriber-api.aicraftors.com"}\"")
+        buildConfigField("String", "SUPABASE_URL", "\"${project.findProperty("SUPABASE_URL") ?: "http://supabasekong-rwc088cksc04g0k4csgogs8s.72.60.181.127.sslip.io"}\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${project.findProperty("SUPABASE_ANON_KEY") ?: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc2NDQwNDQwMCwiZXhwIjo0OTIwMDc4MDAwLCJyb2xlIjoiYW5vbiJ9.NBuvAbQ2K2hg1-Kn34oxBZfXHxBsGdSpnPoc3T-nWpk"}\"")
+        buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL") ?: "http://calltrans-api.72.60.181.127.sslip.io"}\"")
     }
     buildFeatures {
         compose = true

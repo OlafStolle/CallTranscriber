@@ -36,7 +36,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun requestPermissions() {
-        val perms = mutableListOf(Manifest.permission.RECORD_AUDIO)
+        val perms = mutableListOf(
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_PHONE_STATE,
+        )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             perms.add(Manifest.permission.POST_NOTIFICATIONS)
         }

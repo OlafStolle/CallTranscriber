@@ -87,7 +87,7 @@ class CallRecordingService : Service() {
 
         isRecording = true
         audioRecord?.startRecording()
-        Log.i(TAG, "Recording started for call $callId")
+        Log.w(TAG, "§201 StGB: Recording started for call $callId — user must inform call partner!")
 
         scope.launch {
             val rawFile = File(filesDir, "recordings/$callId.pcm")
@@ -163,8 +163,8 @@ class CallRecordingService : Service() {
 
     private fun createNotification(): Notification =
         NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Gespraech wird aufgezeichnet")
-            .setContentText("Aufnahme laeuft...")
+            .setContentTitle("⚠ Aufnahme aktiv")
+            .setContentText("Gespraechspartner muss informiert werden (§201 StGB)")
             .setSmallIcon(android.R.drawable.ic_btn_speak_now)
             .setOngoing(true).build()
 

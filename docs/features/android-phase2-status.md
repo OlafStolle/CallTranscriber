@@ -71,21 +71,22 @@ Lies diese Datei + `CLAUDE.md` + `docs/ARCHITECTURE-DECISIONS.md`.
 **Deployment:**
 - GitHub: `https://github.com/OlafStolle/CallTranscriber.git` (main gepusht)
 - Coolify Projekt: `ksk0gw04so08cssocwwcg40c` (CallTranscriber)
-- Coolify Service: `p88w0k4404scgwg4cg0w0cgw` (docker-compose: backend + web)
-- Backend App UUID: `wcso88ss0sc4o4cc0c0k0g80`
-- Web App UUID: `jkwc448g4ssosw8ko8sksos8`
+- Backend App: `gk40g08ocsokkw08oocsos4c` (Dockerfile, base_dir: /backend)
+- Web App: `pk80c40o8gc80osw8cwcc0cs` (Dockerfile, base_dir: /web)
+- Alter Service `p88w0k4404scgwg4cg0w0cgw` geloescht (kein Webhook-Support)
 
 **URLs:**
-- Web Dashboard: `https://calltrans.ai-crafters.io` (Cloudflare DNS ✅)
-- Backend API: `https://calltrans-api.ai-crafters.io` (Cloudflare DNS ✅)
+- Web Dashboard: `https://calltrans.ai-crafters.io` (Cloudflare DNS ✅, Coolify ✅)
+- Backend API: `https://calltrans-api.ai-crafters.io` (Cloudflare DNS ✅, Coolify ✅)
 
 **Auto-Deploy:**
-- GitHub Actions Workflow: `.github/workflows/deploy.yml`
-- Trigger: Push auf `main` (ignoriert `android/`, `docs/`, `*.md`)
-- Secrets: `COOLIFY_API_KEY` + `COOLIFY_DEPLOY_URL` in GitHub gesetzt
-- Status: Service noch nicht gestartet (braucht .env Dateien auf VPS)
+- GitHub Webhook ID: `602375813`
+- Webhook URL: `https://coolify.ai-crafters.io/webhooks/source/github/events`
+- Webhook Secret: `calltrans-deploy-2026` (auf beiden Apps + GitHub gesetzt)
+- Trigger: Push auf `main` → Coolify baut beide Apps automatisch neu
+- Status: Apps noch nicht gestartet (braucht .env auf VPS)
 
 **Nächster Schritt:**
-1. .env Dateien für backend + web auf VPS konfigurieren (Supabase Keys, OpenAI Key)
-2. Coolify Service starten (`restart` Endpoint)
+1. .env Dateien fuer backend + web in Coolify konfigurieren (Supabase Keys, OpenAI Key)
+2. Apps deployen (push auf main oder manueller Deploy via Coolify)
 3. Gradle Wrapper auf lokaler Dev-Maschine mit Android SDK generieren, committen, dann `./gradlew assembleDebug`

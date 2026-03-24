@@ -68,4 +68,24 @@ Lies diese Datei + `CLAUDE.md` + `docs/ARCHITECTURE-DECISIONS.md`.
 
 **Aktueller Stand:** Alle Code-Änderungen erledigt. Blocker: `gradle` CLI nicht auf Server verfügbar.
 
-**Nächster Schritt:** Gradle Wrapper auf lokaler Dev-Maschine mit Android SDK generieren, committen, dann `./gradlew assembleDebug`.
+**Deployment:**
+- GitHub: `https://github.com/OlafStolle/CallTranscriber.git` (main gepusht)
+- Coolify Projekt: `ksk0gw04so08cssocwwcg40c` (CallTranscriber)
+- Coolify Service: `p88w0k4404scgwg4cg0w0cgw` (docker-compose: backend + web)
+- Backend App UUID: `wcso88ss0sc4o4cc0c0k0g80`
+- Web App UUID: `jkwc448g4ssosw8ko8sksos8`
+
+**URLs:**
+- Web Dashboard: `https://calltrans.ai-crafters.io` (Cloudflare DNS ✅)
+- Backend API: `https://calltrans-api.ai-crafters.io` (Cloudflare DNS ✅)
+
+**Auto-Deploy:**
+- GitHub Actions Workflow: `.github/workflows/deploy.yml`
+- Trigger: Push auf `main` (ignoriert `android/`, `docs/`, `*.md`)
+- Secrets: `COOLIFY_API_KEY` + `COOLIFY_DEPLOY_URL` in GitHub gesetzt
+- Status: Service noch nicht gestartet (braucht .env Dateien auf VPS)
+
+**Nächster Schritt:**
+1. .env Dateien für backend + web auf VPS konfigurieren (Supabase Keys, OpenAI Key)
+2. Coolify Service starten (`restart` Endpoint)
+3. Gradle Wrapper auf lokaler Dev-Maschine mit Android SDK generieren, committen, dann `./gradlew assembleDebug`

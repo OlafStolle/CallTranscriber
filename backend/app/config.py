@@ -1,4 +1,4 @@
-from pydantic import field_validator
+from pydantic import computed_field
 from pydantic_settings import BaseSettings
 
 
@@ -8,15 +8,13 @@ class Settings(BaseSettings):
     supabase_jwt_secret: str
     openai_api_key: str
     upload_max_size_mb: int = 100
-    allowed_origins: list[str] = ["http://localhost:3000"]
-    model_config = {"env_file": ".env"}
+    allowed_origins_str: str = "http://localhost:3000"
+    model_config = {"env_file": ".env", "env_prefix": ""}
 
-    @field_validator("allowed_origins", mode="before")
-    @classmethod
-    def parse_origins(cls, v: object) -> object:
-        if isinstance(v, str) and not v.startswith("["):
-            return [o.strip() for o in v.split(",")]
-        return v
+    @computed_field
+    @property
+    def allowed_origins(self) -> list[str]:
+        return [o.strip() for o in self.allowed_origins_str.split(",")]
 
 
 settings = Settings()
